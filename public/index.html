@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Toolkit - Academic Calculator & API Demo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    code, pre { font-family: 'JetBrains Mono', monospace; }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen py-10 px-4 sm:px-6 lg:px-8">
+
+  <div class="max-w-5xl mx-auto space-y-8">
+    
+    <!-- Top Header & Package Badge -->
+    <header class="bg-slate-800/80 backdrop-blur border border-slate-700/60 rounded-2xl p-6 sm:p-8 shadow-xl">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-3">
+            <span class="text-3xl">🎓</span>
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-300 to-pink-400">
+              @varad123/student-toolkit
+            </h1>
+          </div>
+          <p class="text-slate-400 mt-2 text-sm sm:text-base max-w-2xl">
+            Live interactive web demo & REST API showcase for college academic calculations.
+          </p>
+        </div>
+        <div class="flex flex-wrap sm:flex-col items-start sm:items-end gap-2">
+          <a href="https://www.npmjs.com/package/@varad123/student-toolkit" target="_blank" class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-red-500/20 text-red-300 border border-red-500/30 hover:bg-red-500/30 transition">
+            <span>npm v1.0.1</span>
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+          </a>
+          <span class="inline-flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+            <span>✓ Zero Dependencies</span>
+          </span>
+          <span class="inline-flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-lg bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+            <span>⚡ Node.js ES Modules</span>
+          </span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="flex border-b border-slate-700 space-x-4 overflow-x-auto pb-2">
+      <button onclick="switchTab('tab-attendance')" id="btn-tab-attendance" class="tab-btn px-4 py-2 text-sm font-semibold text-indigo-400 border-b-2 border-indigo-500 whitespace-nowrap">
+        Attendance & Goals
+      </button>
+      <button onclick="switchTab('tab-percentage')" id="btn-tab-percentage" class="tab-btn px-4 py-2 text-sm font-semibold text-slate-400 hover:text-slate-200 border-b-2 border-transparent whitespace-nowrap">
+        Exam Percentage
+      </button>
+      <button onclick="switchTab('tab-sgpa')" id="btn-tab-sgpa" class="tab-btn px-4 py-2 text-sm font-semibold text-slate-400 hover:text-slate-200 border-b-2 border-transparent whitespace-nowrap">
+        SGPA Calculator
+      </button>
+      <button onclick="switchTab('tab-cgpa')" id="btn-tab-cgpa" class="tab-btn px-4 py-2 text-sm font-semibold text-slate-400 hover:text-slate-200 border-b-2 border-transparent whitespace-nowrap">
+        CGPA Calculator
+      </button>
+      <button onclick="switchTab('tab-api')" id="btn-tab-api" class="tab-btn px-4 py-2 text-sm font-semibold text-slate-400 hover:text-slate-200 border-b-2 border-transparent whitespace-nowrap">
+        REST API & Docs
+      </button>
+    </nav>
+
+    <!-- TAB 1: Attendance & Goal Planner -->
+    <section id="tab-attendance" class="tab-content bg-slate-800/90 border border-slate-700 rounded-2xl p-6 sm:p-8 space-y-6">
+      <div>
+        <h2 class="text-xl font-bold text-slate-100 flex items-center gap-2">
+          <span>📅</span> Attendance Tracker & Required Classes Planner
+        </h2>
+        <p class="text-sm text-slate-400 mt-1">
+          Calls <code class="text-indigo-300 bg-slate-900 px-1.5 py-0.5 rounded text-xs">calculateAttendance(attended, total)</code> and <code class="text-indigo-300 bg-slate-900 px-1.5 py-0.5 rounded text-xs">requiredClasses(attended, total, target)</code>.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">Attended Classes</label>
+          <input type="number" id="att-attended" value="30" min="0" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-indigo-500">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">Total Classes Conducted</label>
+          <input type="number" id="att-total" value="50" min="0" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-indigo-500">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">Target Attendance (%)</label>
+          <input type="number" id="att-target" value="75" min="0" max="100" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-indigo-500">
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button onclick="runAttendance()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-5 py-2.5 rounded-lg text-sm transition shadow-lg shadow-indigo-600/30">
+          Compute Attendance
+        </button>
+        <button onclick="setAttendancePreset(38, 48, 75)" class="text-xs text-slate-400 hover:text-indigo-300 underline">
+          Try 38/48
+        </button>
+        <button onclick="setAttendancePreset(0, 0, 75)" class="text-xs text-slate-400 hover:text-indigo-300 underline">
+          Try 0/0 (Start of Sem)
+        </button>
+      </div>
+
+      <div id="att-result-box" class="hidden bg-slate-900/90 border border-slate-700/80 rounded-xl p-5 space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="space-y-1">
+            <span class="text-xs uppercase tracking-wider text-slate-400">Current Attendance</span>
+            <div id="att-res-percentage" class="text-3xl font-extrabold text-indigo-400">0%</div>
+          </div>
+          <span id="att-res-badge" class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Eligible</span>
+        </div>
+
+        <div class="w-full bg-slate-800 rounded-full h-3 overflow-hidden">
+          <div id="att-progress-bar" class="bg-indigo-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+        </div>
+
+        <div class="border-t border-slate-800 pt-3 flex items-center justify-between text-sm">
+          <span class="text-slate-400">Classes Needed to Reach Target:</span>
+          <span id="att-res-needed" class="font-bold text-slate-200">0</span>
+        </div>
+      </div>
+      <div id="att-error" class="hidden text-sm text-red-400 bg-red-950/40 border border-red-800/50 p-3 rounded-lg"></div>
+    </section>
+
+    <!-- TAB 2: Exam Percentage -->
+    <section id="tab-percentage" class="tab-content hidden bg-slate-800/90 border border-slate-700 rounded-2xl p-6 sm:p-8 space-y-6">
+      <div>
+        <h2 class="text-xl font-bold text-slate-100 flex items-center gap-2">
+          <span>📝</span> Examination Percentage Calculator
+        </h2>
+        <p class="text-sm text-slate-400 mt-1">
+          Calls <code class="text-indigo-300 bg-slate-900 px-1.5 py-0.5 rounded text-xs">calculatePercentage(obtainedMarks, totalMarks, precision)</code>.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">Marks Obtained</label>
+          <input type="number" id="pct-marks" value="462" step="0.5" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-indigo-500">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">Total Maximum Marks</label>
+          <input type="number" id="pct-total" value="500" step="1" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-indigo-500">
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button onclick="runPercentage()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-5 py-2.5 rounded-lg text-sm transition shadow-lg shadow-indigo-600/30">
+          Calculate Percentage
+        </button>
+        <button onclick="setPercentagePreset(78.5, 100)" class="text-xs text-slate-400 hover:text-indigo-300 underline">
+          Decimal: 78.5/100
+        </button>
+      </div>
+
+      <div id="pct-result-box" class="hidden bg-slate-900/90 border border-slate-700/80 rounded-xl p-5 space-y-3">
+        <span class="text-xs uppercase tracking-wider text-slate-400">Score Percentage</span>
+        <div id="pct-res-val" class="text-3xl font-extrabold text-emerald-400">0%</div>
+      </div>
+      <div id="pct-error" class="hidden text-sm text-red-400 bg-red-950/40 border border-red-800/50 p-3 rounded-lg"></div>
+    </section>
+
+    <!-- TAB 3: Semester SGPA Calculator -->
+    <section id="tab-sgpa" class="tab-content hidden bg-slate-800/90 border border-slate-700 rounded-2xl p-6 sm:p-8 space-y-6">
+      <div>
+        <h2 class="text-xl font-bold text-slate-100 flex items-center gap-2">
+          <span>📊</span> Semester Grade Point Average (SGPA)
+        </h2>
+        <p class="text-sm text-slate-400 mt-1">
+          Credit-weighted formula: <code class="text-indigo-300 bg-slate-900 px-1.5 py-0.5 rounded text-xs">SGPA = Σ(credits * gradePoint) / Σ(credits)</code>.
+        </p>
+      </div>
+
+      <div class="space-y-3" id="sgpa-subjects-container">
+        <!-- Dynamic Rows -->
+      </div>
+
+      <div class="flex flex-wrap items-center gap-3">
+        <button onclick="addSubjectRow()" class="border border-slate-600 hover:bg-slate-700 text-slate-200 font-medium px-4 py-2 rounded-lg text-xs transition">
+          + Add Course
+        </button>
+        <button onclick="runSGPA()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-5 py-2 rounded-lg text-sm transition shadow-lg shadow-indigo-600/30">
+          Compute SGPA
+        </button>
+      </div>
+
+      <div id="sgpa-result-box" class="hidden bg-slate-900/90 border border-slate-700/80 rounded-xl p-5 flex items-center justify-between">
+        <div>
+          <span class="text-xs uppercase tracking-wider text-slate-400">Calculated SGPA</span>
+          <div id="sgpa-res-val" class="text-3xl font-extrabold text-purple-400">0.00 / 10</div>
+        </div>
+        <div class="text-right text-xs text-slate-400" id="sgpa-res-meta">
+          Total Credits: 0
+        </div>
+      </div>
+      <div id="sgpa-error" class="hidden text-sm text-red-400 bg-red-950/40 border border-red-800/50 p-3 rounded-lg"></div>
+    </section>
+
+    <!-- TAB 4: Cumulative CGPA Calculator -->
+    <section id="tab-cgpa" class="tab-content hidden bg-slate-800/90 border border-slate-700 rounded-2xl p-6 sm:p-8 space-y-6">
+      <div>
+        <h2 class="text-xl font-bold text-slate-100 flex items-center gap-2">
+          <span>🏆</span> Cumulative Grade Point Average (CGPA)
+        </h2>
+        <p class="text-sm text-slate-400 mt-1">
+          Multi-semester degree average with support for credit-weighted or unweighted SGPAs.
+        </p>
+      </div>
+
+      <div class="space-y-3" id="cgpa-semesters-container">
+        <!-- Dynamic Semester Rows -->
+      </div>
+
+      <div class="flex flex-wrap items-center gap-3">
+        <button onclick="addSemesterRow()" class="border border-slate-600 hover:bg-slate-700 text-slate-200 font-medium px-4 py-2 rounded-lg text-xs transition">
+          + Add Semester
+        </button>
+        <button onclick="runCGPA()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-5 py-2 rounded-lg text-sm transition shadow-lg shadow-indigo-600/30">
+          Compute CGPA
+        </button>
+      </div>
+
+      <div id="cgpa-result-box" class="hidden bg-slate-900/90 border border-slate-700/80 rounded-xl p-5 flex items-center justify-between">
+        <div>
+          <span class="text-xs uppercase tracking-wider text-slate-400">Calculated CGPA</span>
+          <div id="cgpa-res-val" class="text-3xl font-extrabold text-pink-400">0.00 / 10</div>
+        </div>
+        <div class="text-right text-xs text-slate-400" id="cgpa-res-meta">
+          Total Semesters: 0
+        </div>
+      </div>
+      <div id="cgpa-error" class="hidden text-sm text-red-400 bg-red-950/40 border border-red-800/50 p-3 rounded-lg"></div>
+    </section>
+
+    <!-- TAB 5: REST API & Docs -->
+    <section id="tab-api" class="tab-content hidden bg-slate-800/90 border border-slate-700 rounded-2xl p-6 sm:p-8 space-y-6">
+      <div>
+        <h2 class="text-xl font-bold text-slate-100 flex items-center gap-2">
+          <span>🔌</span> Live HTTP REST API Endpoints
+        </h2>
+        <p class="text-sm text-slate-400 mt-1">
+          Each endpoint uses <code class="text-indigo-300 bg-slate-900 px-1 py-0.5 rounded text-xs">@varad123/student-toolkit</code> functions under the hood.
+        </p>
+      </div>
+
+      <div class="space-y-4 text-xs">
+        <!-- Endpoint 1 -->
+        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="bg-indigo-600 text-white px-2 py-0.5 rounded font-bold">POST</span>
+            <span class="font-mono text-slate-300">/api/attendance</span>
+          </div>
+          <pre class="bg-slate-950 p-3 rounded text-slate-300 overflow-x-auto">{"attended": 30, "total": 50, "target": 75}</pre>
+        </div>
+
+        <!-- Endpoint 2 -->
+        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="bg-indigo-600 text-white px-2 py-0.5 rounded font-bold">POST</span>
+            <span class="font-mono text-slate-300">/api/percentage</span>
+          </div>
+          <pre class="bg-slate-950 p-3 rounded text-slate-300 overflow-x-auto">{"marks": 462, "total": 500}</pre>
+        </div>
+
+        <!-- Endpoint 3 -->
+        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="bg-indigo-600 text-white px-2 py-0.5 rounded font-bold">POST</span>
+            <span class="font-mono text-slate-300">/api/sgpa</span>
+          </div>
+          <pre class="bg-slate-950 p-3 rounded text-slate-300 overflow-x-auto">{"subjects": [{"credits": 4, "gradePoint": 9}, {"credits": 3, "gradePoint": 8}]}</pre>
+        </div>
+
+        <!-- Endpoint 4 -->
+        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="bg-indigo-600 text-white px-2 py-0.5 rounded font-bold">POST</span>
+            <span class="font-mono text-slate-300">/api/cgpa</span>
+          </div>
+          <pre class="bg-slate-950 p-3 rounded text-slate-300 overflow-x-auto">{"semesters": [{"sgpa": 8.5, "credits": 20}, {"sgpa": 9.0, "credits": 22}]}</pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center text-xs text-slate-500 py-4">
+      Built for students & academic developers &bull; Powered by <strong>@varad123/student-toolkit</strong> &bull; Node.js + Express
+    </footer>
+
+  </div>
+
+  <script>
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('text-indigo-400', 'border-indigo-500');
+        btn.classList.add('text-slate-400', 'border-transparent');
+      });
+
+      document.getElementById(tabId).classList.remove('hidden');
+      const activeBtn = document.getElementById('btn-' + tabId);
+      if (activeBtn) {
+        activeBtn.classList.add('text-indigo-400', 'border-indigo-500');
+        activeBtn.classList.remove('text-slate-400', 'border-transparent');
+      }
+    }
+
+    // Attendance Tab Logic
+    async function runAttendance() {
+      const attended = document.getElementById('att-attended').value;
+      const total = document.getElementById('att-total').value;
+      const target = document.getElementById('att-target').value;
+      const errorBox = document.getElementById('att-error');
+      const resultBox = document.getElementById('att-result-box');
+
+      errorBox.classList.add('hidden');
+      resultBox.classList.add('hidden');
+
+      try {
+        const res = await fetch('/api/attendance', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ attended, total, target })
+        });
+        const data = await res.json();
+
+        if (!data.success) {
+          errorBox.innerText = data.error;
+          errorBox.classList.remove('hidden');
+          return;
+        }
+
+        const pct = data.data.currentAttendance;
+        const needed = data.data.neededClasses;
+        const isEligible = pct >= Number(target);
+
+        document.getElementById('att-res-percentage').innerText = pct + '%';
+        const badge = document.getElementById('att-res-badge');
+        badge.innerText = isEligible ? 'Eligible' : 'At Risk';
+        badge.className = isEligible 
+          ? 'px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+          : 'px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-rose-500/20 text-rose-300 border border-rose-500/30';
+
+        const bar = document.getElementById('att-progress-bar');
+        bar.style.width = Math.min(100, Math.max(0, pct)) + '%';
+        bar.className = isEligible 
+          ? 'bg-emerald-500 h-full rounded-full transition-all duration-500'
+          : 'bg-rose-500 h-full rounded-full transition-all duration-500';
+
+        const neededText = needed === 'Infinity' 
+          ? 'Impossible (100% target missed)' 
+          : needed === 0 ? '0 (Target already achieved!)' : `${needed} consecutive classes`;
+        document.getElementById('att-res-needed').innerText = neededText;
+
+        resultBox.classList.remove('hidden');
+      } catch (err) {
+        errorBox.innerText = 'Network error: ' + err.message;
+        errorBox.classList.remove('hidden');
+      }
+    }
+
+    function setAttendancePreset(att, tot, tgt) {
+      document.getElementById('att-attended').value = att;
+      document.getElementById('att-total').value = tot;
+      document.getElementById('att-target').value = tgt;
+      runAttendance();
+    }
+
+    // Percentage Tab Logic
+    async function runPercentage() {
+      const marks = document.getElementById('pct-marks').value;
+      const total = document.getElementById('pct-total').value;
+      const errorBox = document.getElementById('pct-error');
+      const resultBox = document.getElementById('pct-result-box');
+
+      errorBox.classList.add('hidden');
+      resultBox.classList.add('hidden');
+
+      try {
+        const res = await fetch('/api/percentage', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ marks, total })
+        });
+        const data = await res.json();
+
+        if (!data.success) {
+          errorBox.innerText = data.error;
+          errorBox.classList.remove('hidden');
+          return;
+        }
+
+        document.getElementById('pct-res-val').innerText = data.data.percentage + '%';
+        resultBox.classList.remove('hidden');
+      } catch (err) {
+        errorBox.innerText = 'Network error: ' + err.message;
+        errorBox.classList.remove('hidden');
+      }
+    }
+
+    function setPercentagePreset(marks, total) {
+      document.getElementById('pct-marks').value = marks;
+      document.getElementById('pct-total').value = total;
+      runPercentage();
+    }
+
+    // SGPA Tab Logic
+    const defaultSubjects = [
+      { name: 'Data Structures', credits: 4, gradePoint: 9 },
+      { name: 'Operating Systems', credits: 4, gradePoint: 8 },
+      { name: 'Database Systems', credits: 3, gradePoint: 10 },
+      { name: 'Mathematics', credits: 3, gradePoint: 8 },
+      { name: 'Laboratory', credits: 2, gradePoint: 10 }
+    ];
+
+    function renderSubjectRows() {
+      const container = document.getElementById('sgpa-subjects-container');
+      container.innerHTML = defaultSubjects.map((sub, idx) => `
+        <div class="grid grid-cols-12 gap-2 items-center bg-slate-900/60 p-3 rounded-xl border border-slate-800" id="sub-row-${idx}">
+          <input type="text" value="${sub.name}" placeholder="Course Name" class="col-span-5 bg-slate-900 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-slate-100">
+          <input type="number" value="${sub.credits}" min="1" max="10" placeholder="Credits" class="sub-cred col-span-3 bg-slate-900 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-slate-100">
+          <input type="number" value="${sub.gradePoint}" min="0" max="10" step="0.1" placeholder="GP (0-10)" class="sub-gp col-span-3 bg-slate-900 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-slate-100">
+          <button onclick="removeSubjectRow(${idx})" class="col-span-1 text-slate-500 hover:text-rose-400 text-center font-bold">×</button>
+        </div>
+      `).join('');
+    }
+
+    function addSubjectRow() {
+      defaultSubjects.push({ name: 'Elective Course', credits: 3, gradePoint: 9 });
+      renderSubjectRows();
+    }
+
+    function removeSubjectRow(idx) {
+      if (defaultSubjects.length <= 1) return;
+      defaultSubjects.splice(idx, 1);
+      renderSubjectRows();
+    }
+
+    async function runSGPA() {
+      const credInputs = document.querySelectorAll('.sub-cred');
+      const gpInputs = document.querySelectorAll('.sub-gp');
+      const subjects = [];
+
+      for (let i = 0; i < credInputs.length; i++) {
+        subjects.push({
+          credits: Number(credInputs[i].value),
+          gradePoint: Number(gpInputs[i].value)
+        });
+      }
+
+      const errorBox = document.getElementById('sgpa-error');
+      const resultBox = document.getElementById('sgpa-result-box');
+      errorBox.classList.add('hidden');
+      resultBox.classList.add('hidden');
+
+      try {
+        const res = await fetch('/api/sgpa', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ subjects })
+        });
+        const data = await res.json();
+
+        if (!data.success) {
+          errorBox.innerText = data.error;
+          errorBox.classList.remove('hidden');
+          return;
+        }
+
+        document.getElementById('sgpa-res-val').innerText = data.data.sgpa.toFixed(2) + ' / 10';
+        document.getElementById('sgpa-res-meta').innerText = `Total Credits: ${data.data.totalCredits}`;
+        resultBox.classList.remove('hidden');
+      } catch (err) {
+        errorBox.innerText = 'Network error: ' + err.message;
+        errorBox.classList.remove('hidden');
+      }
+    }
+
+    // CGPA Tab Logic
+    const defaultSemesters = [
+      { name: 'Semester 1', sgpa: 8.5, credits: 21 },
+      { name: 'Semester 2', sgpa: 8.75, credits: 22 },
+      { name: 'Semester 3', sgpa: 8.2, credits: 20 },
+      { name: 'Semester 4', sgpa: 9.1, credits: 23 }
+    ];
+
+    function renderSemesterRows() {
+      const container = document.getElementById('cgpa-semesters-container');
+      container.innerHTML = defaultSemesters.map((sem, idx) => `
+        <div class="grid grid-cols-12 gap-2 items-center bg-slate-900/60 p-3 rounded-xl border border-slate-800">
+          <input type="text" value="${sem.name}" class="col-span-5 bg-slate-900 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-slate-100">
+          <input type="number" value="${sem.sgpa}" min="0" max="10" step="0.01" placeholder="SGPA" class="sem-sgpa col-span-3 bg-slate-900 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-slate-100">
+          <input type="number" value="${sem.credits}" min="1" max="40" placeholder="Credits" class="sem-cred col-span-3 bg-slate-900 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-slate-100">
+          <button onclick="removeSemesterRow(${idx})" class="col-span-1 text-slate-500 hover:text-rose-400 text-center font-bold">×</button>
+        </div>
+      `).join('');
+    }
+
+    function addSemesterRow() {
+      defaultSemesters.push({ name: `Semester ${defaultSemesters.length + 1}`, sgpa: 8.5, credits: 20 });
+      renderSemesterRows();
+    }
+
+    function removeSemesterRow(idx) {
+      if (defaultSemesters.length <= 1) return;
+      defaultSemesters.splice(idx, 1);
+      renderSemesterRows();
+    }
+
+    async function runCGPA() {
+      const sgpaInputs = document.querySelectorAll('.sem-sgpa');
+      const credInputs = document.querySelectorAll('.sem-cred');
+      const semesters = [];
+
+      for (let i = 0; i < sgpaInputs.length; i++) {
+        semesters.push({
+          sgpa: Number(sgpaInputs[i].value),
+          credits: Number(credInputs[i].value)
+        });
+      }
+
+      const errorBox = document.getElementById('cgpa-error');
+      const resultBox = document.getElementById('cgpa-result-box');
+      errorBox.classList.add('hidden');
+      resultBox.classList.add('hidden');
+
+      try {
+        const res = await fetch('/api/cgpa', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ semesters })
+        });
+        const data = await res.json();
+
+        if (!data.success) {
+          errorBox.innerText = data.error;
+          errorBox.classList.remove('hidden');
+          return;
+        }
+
+        document.getElementById('cgpa-res-val').innerText = data.data.cgpa.toFixed(2) + ' / 10';
+        document.getElementById('cgpa-res-meta').innerText = `Total Semesters: ${data.data.totalSemesters}`;
+        resultBox.classList.remove('hidden');
+      } catch (err) {
+        errorBox.innerText = 'Network error: ' + err.message;
+        errorBox.classList.remove('hidden');
+      }
+    }
+
+    // Initial setup
+    renderSubjectRows();
+    renderSemesterRows();
+    runAttendance();
+  </script>
+</body>
+</html>

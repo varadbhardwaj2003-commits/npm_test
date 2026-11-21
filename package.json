@@ -1,0 +1,20 @@
+{
+  "name": "student-toolkit-demo",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Live web demo and REST API showcasing @varad123/student-toolkit",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "cli": "node demo.js",
+    "interactive": "node interactive.js"
+  },
+  "dependencies": {
+    "@varad123/student-toolkit": "^1.0.1",
+    "express": "^4.22.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
