@@ -180,7 +180,12 @@ app.post('/api/cgpa', (req, res) => {
   }
 });
 
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 Student Toolkit Demo Server listening on port ${PORT}`);
-  console.log(`🌐 Web interface available at http://localhost:${PORT}`);
-});
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Student Toolkit Demo Server listening on port ${PORT}`);
+    console.log(`🌐 Web interface available at http://localhost:${PORT}`);
+  });
+}
+
+export default app;
+
